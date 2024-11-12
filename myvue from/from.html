@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- เพิ่ม Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Student Registration Form</title>
+</head>
+<body class="bg-light">
+    <div id="app">
+        <div class="container py-5">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <!-- เพิ่ม Animation เมื่อโหลดหน้า -->
+              <div class="card shadow-lg fade-in">
+                <div class="card-header text-white">
+                  <h3 class="mb-0 fw-bold">ลงทะเบียนข้อมูลนักศึกษา</h3>
+                  <p class="mb-0 mt-1 small">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+                </div>
+                <div class="card-body custom-bg-light">
+                  <form @submit.prevent="handleSubmit" class="needs-validation" novalidate>
+                    <div class="row g-4">
+                      <!-- ชื่อ -->
+                      <div class="col-md-6">
+                        <div class="form-floating custom-input-group">
+                          <input
+                            type="text"
+                            class="form-control custom-input"
+                            id="firstname"
+                            v-model="form.firstname"
+                            required
+                            placeholder="ชื่อ"
+                            :class="{ 'is-invalid': errors.firstname }"
+                          >
+                          <label for="firstname">ชื่อ</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกชื่อ
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- นามสกุล -->
+                      <div class="col-md-6">
+                        <div class="form-floating custom-input-group">
+                          <input
+                            type="text"
+                            class="form-control custom-input"
+                            id="lastname"
+                            v-model="form.lastname"
+                            required
+                            placeholder="นามสกุล"
+                            :class="{ 'is-invalid': errors.lastname }"
+                          >
+                          <label for="lastname">นามสกุล</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกนามสกุล
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- เบอร์โทรศัพท์ -->
+                      <div class="col-md-6">
+                        <div class="form-floating custom-input-group">
+                          <input
+                            type="tel"
+                            class="form-control custom-input"
+                            id="phone"
+                            v-model="form.phone"
+                            required
+                            placeholder="เบอร์โทรศัพท์"
+                            :class="{ 'is-invalid': errors.phone }"
+                            pattern="^0[0-9]{9}$"
+                          >
+                          <label for="phone">เบอร์โทรศัพท์</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกเบอร์โทรศัพท์ที่ขึ้นต้นด้วย 0 และมี 10 หลัก
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- รหัสนักศึกษา -->
+                      <div class="col-md-6">
+                        <div class="form-floating custom-input-group">
+                          <input
+                            type="text"
+                            class="form-control custom-input"
+                            id="studentId"
+                            v-model="form.studentId"
+                            required
+                            placeholder="รหัสนักศึกษา"
+                            :class="{ 'is-invalid': errors.studentId }"
+                            pattern="[0-9]{10}"
+                          >
+                          <label for="studentId">รหัสนักศึกษา</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกรหัสนักศึกษา 10 หลัก
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- เลขบัตรประชาชน -->
+                      <div class="col-md-6">
+                        <div class="form-floating custom-input-group">
+                          <input
+                            type="text"
+                            class="form-control custom-input"
+                            id="idCard"
+                            v-model="form.idCard"
+                            required
+                            placeholder="เลขบัตรประชาชน"
+                            :class="{ 'is-invalid': errors.idCard }"
+                            pattern="[0-9]{13}"
+                          >
+                          <label for="idCard">เลขบัตรประชาชน</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกเลขบัตรประชาชน 13 หลัก
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- อีเมล -->
+                      <div class="col-md-6">
+                        <div class="form-floating custom-input-group">
+                          <input
+                            type="email"
+                            class="form-control custom-input"
+                            id="email"
+                            v-model="form.email"
+                            required
+                            placeholder="อีเมล"
+                            :class="{ 'is-invalid': errors.email }"
+                          >
+                          <label for="email">อีเมล</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกอีเมลให้ถูกต้อง
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- ที่อยู่ -->
+                      <div class="col-12">
+                        <div class="form-floating custom-input-group">
+                          <textarea
+                            class="form-control custom-input"
+                            id="address"
+                            v-model="form.address"
+                            required
+                            placeholder="ที่อยู่"
+                            :class="{ 'is-invalid': errors.address }"
+                            style="height: 100px"
+                          ></textarea>
+                          <label for="address">ที่อยู่</label>
+                          <div class="invalid-feedback">
+                            กรุณากรอกที่อยู่
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!-- ปุ่มส่งข้อมูล และ ปุ่มล้างข้อมูล -->
+                      <div class="col-12">
+                        <div class="row g-2">
+                          <div class="col-md-6">
+                            <button type="submit" class="btn btn-success w-100 py-3 custom-button">
+                              บันทึกข้อมูล
+                            </button>
+                          </div>
+                          <div class="col-md-6">
+                            <button type="button" @click="resetForm" class="btn btn-secondary w-100 py-3 custom-button-reset">
+                              ล้างข้อมูล
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <style>
+      /* ตั้งค่าฟอนต์หลัก */
+      body {
+        font-family: 'Prompt', sans-serif;
+        background-color: #f0f9f0 !important;
+      }
+
+      /* Animation เมื่อโหลดหน้า */
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* สไตล์การ์ด */
+      .card {
+        border: none;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        background: white;
+      }
+      
+      .card-header {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        padding: 1.5rem;
+        border-bottom: none;
+      }
+
+      .custom-bg-light {
+        background-color: #ffffff;
+        padding: 2rem;
+      }
+
+      /* สไตล์ Input */
+      .custom-input-group {
+        margin-bottom: 0.5rem;
+      }
+
+      .custom-input {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .custom-input:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+      }
+
+      /* สไตล์ Label */
+      .form-floating > label {
+        padding: 1rem;
+        color: #6c757d;
+      }
+
+      .form-floating > .form-control:focus ~ label,
+      .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        color: #28a745;
+        transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
+      }
+
+      /* สไตล์ปุ่ม */
+      .custom-button {
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      .custom-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        background: linear-gradient(135deg, #218838 0%, #1ba97e 100%);
+      }
+
+      /* สไตล์ปุ่มล้างข้อมูล */
+      .custom-button-reset {
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      .custom-button-reset:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+      }
+
+      /* สไตล์ข้อความ Error */
+      .invalid-feedback {
+        font-size: 0.875rem;
+        color: #dc3545;
+        margin-top: 0.25rem;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .card-body {
+          padding: 1rem;
+        }
+        
+        .row.g-4 {
+          row-gap: 1rem !important;
+        }
+      }
+
+      /* เพิ่ม Hover effect สำหรับ input */
+      .custom-input:hover {
+        border-color: #28a745;
+      }
+
+      /* เพิ่มลูกเล่นเมื่อ focus ที่ input */
+      .custom-input:focus {
+        transform: translateY(-2px);
+      }
+    </style>
+
+    <script>
+      const { createApp } = Vue
+
+      createApp({
+        data() {
+          return {
+            form: {
+              firstname: '',
+              lastname: '',
+              phone: '',
+              studentId: '',
+              idCard: '',
+              email: '',
+              address: ''
+            },
+            errors: {
+              firstname: false,
+              lastname: false,
+              phone: false,
+              studentId: false,
+              idCard: false,
+              email: false,
+              address: false
+            }
+          }
+        },
+        methods: {
+          validateForm() {
+            let isValid = true
+            
+            // Reset errors
+            Object.keys(this.errors).forEach(key => {
+              this.errors[key] = false
+            })
+      
+            // Validate each field
+            if (!this.form.firstname) {
+              this.errors.firstname = true
+              isValid = false
+            }
+      
+            if (!this.form.lastname) {
+              this.errors.lastname = true
+              isValid = false
+            }
+      
+            if (!this.form.phone || !/^0[0-9]{9}$/.test(this.form.phone)) {
+              this.errors.phone = true
+              isValid = false
+            }
+      
+            if (!this.form.studentId || !/^[0-9]{10}$/.test(this.form.studentId)) {
+              this.errors.studentId = true
+              isValid = false
+            }
+      
+            if (!this.form.idCard || !/^[0-9]{13}$/.test(this.form.idCard)) {
+              this.errors.idCard = true
+              isValid = false
+            }
+      
+            if (!this.form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) {
+              this.errors.email = true
+              isValid = false
+            }
+      
+            if (!this.form.address) {
+              this.errors.address = true
+              isValid = false
+            }
+      
+            return isValid
+          },
+          handleSubmit() {
+            if (this.validateForm()) {
+                console.log('Form submitted:', this.form)
+              Swal.fire({
+                title: "สุดยอดมากสุดหล่อ!",
+                text: "บันทึกข้อมูลเรียบร้อยแล้ว!",
+                icon: "success"
+              });
+            } else {
+              Swal.fire({
+                title: "ข้อมูลไม่ครบถ้วน!",
+                text: "กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน",
+                icon: "error"
+              });
+            }
+          },
+          resetForm() {
+            // แสดง confirm dialog
+            Swal.fire({
+              title: 'ยืนยันการล้างข้อมูล?',
+              text: "ข้อมูลที่กรอกทั้งหมดจะหายไป",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'ยืนยัน',
+              cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // รีเซ็ตค่าในฟอร์มทั้งหมด
+                this.form = {
+                  firstname: '',
+                  lastname: '',
+                  phone: '',
+                  studentId: '',
+                  idCard: '',
+                  email: '',
+                  address: ''
+                }
+                // รีเซ็ต errors
+                Object.keys(this.errors).forEach(key => {
+                  this.errors[key] = false
+                })
+                // แสดงข้อความสำเร็จ
+                Swal.fire(
+                  'ล้างข้อมูลสำเร็จ!',
+                  'ข้อมูลทั้งหมดถูกล้างแล้ว',
+                  'success'
+                )
+              }
+            })
+          }
+        }
+      }).mount('#app')
+    </script>
+</body>
+</html>
